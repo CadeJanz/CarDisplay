@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Display</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <img id="displayImage" src="" alt="Display" />
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyC1AvxIlpumKYtu9i7i1rbeSK34K6F5vCw",
+  authDomain: "cardisplay-1870a.firebaseapp.com",
+  databaseURL: "https://cardisplay-1870a-default-rtdb.firebaseio.com",
+  projectId: "cardisplay-1870a",
+  storageBucket: "cardisplay-1870a.firebasestorage.app",
+  messagingSenderId: "649567300417",
+  appId: "1:649567300417:web:f49fea8cb41d89db200fc0"
+};
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const img = document.getElementById("displayImage");
+
+    db.ref("display/image").on("value", snapshot => {
+      const data = snapshot.val();
+      if (data) {
+        img.src = data;
+      }
+    });
+
+    db.ref("display/blackout").on("value", snapshot => {
+      const isBlackout = snapshot.val();
+      if (isBlackout) {
+        img.style.display = "none";
+        document.body.style.backgroundColor = "black";
+      } else {
+        img.style.display = "block";
+        document.body.style.backgroundColor = "black";
+      }
+    });
+  </script>
+</body>
+</html>

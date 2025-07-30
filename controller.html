@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Controller</title>
+</head>
+<body>
+  <h2>Upload an image or GIF</h2>
+  <input type="file" accept="image/*" onchange="uploadImage(event)" />
+  <br><br>
+  <button onclick="toggleBlackout()">Toggle Blackout</button>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyC1AvxIlpumKYtu9i7i1rbeSK34K6F5vCw",
+  authDomain: "cardisplay-1870a.firebaseapp.com",
+  databaseURL: "https://cardisplay-1870a-default-rtdb.firebaseio.com",
+  projectId: "cardisplay-1870a",
+  storageBucket: "cardisplay-1870a.firebasestorage.app",
+  messagingSenderId: "649567300417",
+  appId: "1:649567300417:web:f49fea8cb41d89db200fc0"
+};
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function uploadImage(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        const imageData = e.target.result;
+        db.ref("display").set({ image: imageData, blackout: false });
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    function toggleBlackout() {
+      db.ref("display/blackout").once("value").then(snapshot => {
+        const current = snapshot.val();
+        db.ref("display/blackout").set(!current);
+      });
+    }
+  </script>
+</body>
+</html>
