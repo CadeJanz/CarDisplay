@@ -2,13 +2,18 @@
 <html>
 <head>
   <title>Controller</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h2>Upload an image or GIF</h2>
   <input type="file" accept="image/*" onchange="uploadImage(event)" />
   <br><br>
   <button onclick="toggleBlackout()">Toggle Blackout</button>
-
+  <h3>Quick Images</h3>
+  <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+    <img src="loading.gif" style="width:100px;cursor:pointer;" onclick="sendPresetImage(this.src)" />
+    <img src="ezgif.com-added-text.gif" style="width:100px;cursor:pointer;" onclick="sendPresetImage(this.src)" />
+  </div>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
   <script>
@@ -43,6 +48,10 @@
         const current = snapshot.val();
         db.ref("display/blackout").set(!current);
       });
+    }
+
+    function sendPresetImage(src) {
+      db.ref("display").set({ image: src, blackout: false });
     }
   </script>
 </body>
